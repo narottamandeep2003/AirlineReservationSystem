@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+        <title>Home</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            body {
+                width: 100vw;
+                overflow-x: hidden;
+            }
+        </style>
+    </head>
+
+
+    <body>
+        <!-- navbar -->
+        <div class=' w-screen h-[70px] fixed top-0 left-0 flex justify-between max-lg:hidden z-50 bg-white'>
+            <ul class=' flex justify-center items-center space-x-10  w-1/3 max-lg:space-x-6 '>
+                <li ><a href="/Flight/" class="text-black">Flight</a></li>
+                <li ><a href="/Flight/about" class="text-black">About</a></li>
+                <li ><a href="/Flight/feedback" class="text-black">Feedback</a></li>
+                <li ><a href="/Flight/blog" class="text-black">Blog</a></li>
+            </ul>
+            <ul class=' flex  items-center justify-center w-1/3'>
+                <li class='font-black'><a href="/Flight">Flight Booking</a></li>
+            </ul>
+            <ul class=' flex justify-center items-center space-x-10 w-1/3 max-lg:space-x-6' id="ul">
+                <li class=' bold cursor-pointer'><a href="/Flight/signUp.html">sign up</a></li>
+                <li class=' bold'><a href="/Flight/login.html">Login</a></li>
+            </ul>
+        </div>
+        <div class=' w-screen  flex justify-center items-center flex-col mt-[70px] '>
+            <img src="./bg.jpg" alt="..." class='w-[90%] h-[70vh] object-cover origin-center ' />
+        </div>
+
+
+
+        <div class="relative top-[-120px] left-0 w-screen h-[200px] flex justify-center items-center z-50 ">
+            <div class="w-[70%] h-full bg-gray-100 rounded-xl p-6 flex flex-col justify-center items-center shadow-md ">
+                <div class="mb-4 w-full ">
+                    <label for="search" class="block font-bold mb-1">Search</label>
+                    <div class="flex w-full space-x-6">
+                        <input type="text" id="search"
+                               class="w-[80%] px-4 py-1 rounded-md border border-gray-400 focus:outline-none focus:border-blue-500 w-full"
+                               placeholder="Enter your search term...">
+
+                        <input type="radio" hidden name="sort" id="LowToHight">
+                        <input type="radio" hidden name="sort" id="HightToLow">
+                        <label for="LowToHight" id="btn1"
+                               class="  w-[200px] px-4 py-1 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:bg-blue-600 ">Low
+                            to High</label>
+                        <label for="HightToLow" id="btn2"
+                               class="w-[200px] h-[50px] px-4 py-1 bg-blue-500 text-white rounded-full hover:bg-blue-600 focus:outline-none focus:bg-blue-600">High
+                            to Low</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="relative top-[-145px] left-0 w-screen  flex justify-center items-center z-50 flex-col " >
+            <div class="flex justify-between mb-4">
+                <button class="bg-blue-500 px-10 py-4 rounded-full text-white" id="btn">Search</button>
+            </div>
+            <div class="w-screen flex justify-center mb-10 ">
+                <div class="flex flex-col w-[80%] border rounded-md p-4 shadow-md space-y-10" id="flight" >
+
+
+
+
+
+                </div>
+
+            </div>
+        </div>
+
+
+    </body>
+
+    <script>
+
+
+        let book = (e) => {
+            localStorage.setItem("flight", JSON.stringify(e));
+            location.replace("http://localhost:8080/Flight/bookFlight.html");
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            let User = localStorage.getItem("user"); // Corrected method name to getItem
+            User = JSON.parse(User);
+            const ulElement = document.getElementById("ul"); // Corrected method name to getElementById
+            if (User && User.role === "Admin") {
+                ulElement.innerHTML = `
+            <li class='bold'><a >Logout</a></li>
+            <li class='bold'><a href="/Flight/insertFlight.html">Insert Flight</a></li>
+            <li class='bold'><a href="/Flight/insertAirplane.html">Insert AirPlane</a></li>
+        `;
+            } else if (User && User.role === "User") {
+                ulElement.innerHTML = `
+            <li class='bold'><a >Logout</a></li>
+        `;
+            }
+
+
+
+            fetch("/Flight/GetFlights").then((res) => {
+                return res.json();
+            }).then((data) => {
+                console.log(data)
+                if (data.status == "ok") {
+                    data.res.forEach((e) => {
+                        document.getElementById("flight").innerHTML += `
+    <div class="flex items-center justify-center w-full space-x-14 ">
+                        <span class="font-bold">Airline: </span>
+                        <span>${e.airline}</span>
+                        <span class="mx-1"></span>
+                        <span class="font-bold">From:</span>
+                        <span>${e.departureFrom}</span>
+                        <span class="font-bold">Time:</span>
+                        <span>${e.departuretime}</span>
+                        <span class="mx-1">></span>
+                        <span class="font-bold">To:</span>
+                        <span>${e.destination}</span>
+                        <span>${e.EconomyPrice}</span>
+                        <span class="ml-auto">
+                            <i class="bi bi-heart-fill text-red-500"></i>
+                        </span>
+                        <button class="ml-2 px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600" onclick="book(${e.flightId})"
+>Book</button>
+                    </div>`;
+                    })
+                }
+            }
+            );
+        });
+
+
+        let handleClick = (s) => {
+            let sort = document.querySelector("input[name='sort']:checked") ? document.querySelector("input[name='sort']:checked").getAttribute("id") : "none";
+            let search = document.getElementById("search").value;
+            let jsonData = {
+                "search": search,
+                "sort": sort
+            };
+            fetch("/Flight/Search", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json;charset=UTF-8"
+                },
+                body: JSON.stringify(jsonData)
+            }).then((res) => {
+                return res.json();
+            }).then((data) => {
+//                console.log(data,search);
+                if (data.status === "ok") {
+                    let reslist = data.res.filter((e) => {
+                        // Ignore case
+                        let searchLower = search.toLowerCase();
+                        let airlineLower = e.airline.toLowerCase();
+                        let departureFromLower = e.departureFrom.toLowerCase();
+                        let destinationLower = e.destination.toLowerCase();
+
+                        if (searchLower.length === 0) {
+                            return true;
+                        } else if (searchLower.length !== 0 && (airlineLower.includes(searchLower) || departureFromLower.includes(searchLower) || destinationLower.includes(searchLower))) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }).sort((a, b) => {
+
+                        if (!s)
+                            return a.EconomyPrice - b.EconomyPrice;
+                        else
+                            return b.EconomyPrice - a.EconomyPrice;
+                    });
+
+
+                    console.log(reslist);
+                    document.getElementById("flight").innerHTML = "";
+                    reslist.forEach((e) => {
+                        document.getElementById("flight").innerHTML += `
+    <div class="flex items-center justify-center w-full space-x-14 ">
+                        <span class="font-bold">Airline: </span>
+                        <span>${e.airline}</span>
+                        <span class="mx-1"></span>
+                        <span class="font-bold">From:</span>
+                        <span>${e.departureFrom}</span>
+                        <span class="font-bold">Time:</span>
+                        <span>${e.departuretime}</span>
+                        <span class="mx-1">></span>
+                        <span class="font-bold">To:</span>
+                        <span>${e.destination}</span>
+                        <span>${e.EconomyPrice}</span>
+                        <span class="ml-auto">
+                            <i class="bi bi-heart-fill text-red-500"></i>
+                        </span>
+                        <button class="ml-2 px-3 py-1 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none focus:bg-blue-600" onclick="book(${e.flightId})"
+>Book</button>
+                    </div>`;
+                    });
+
+
+                } else {
+
+                    alert("Registration failed: " + data.message);
+                }
+            }).catch((error) => {
+                console.error("Error:", error);
+                alert("An error occurred while processing your request");
+            });
+            console.log(sort, search);
+        }
+        document.getElementById("btn").addEventListener("click", () => {
+            handleClick()
+        });
+        document.getElementById("btn1").addEventListener("click", () => {
+            handleClick(false)
+        });
+        document.getElementById("btn2").addEventListener("click", () => {
+            handleClick(true)
+        }
+        );
+
+
+    </script>
+</html>
+
+
+
+
+

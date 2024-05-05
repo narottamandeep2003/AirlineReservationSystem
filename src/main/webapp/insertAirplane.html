@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Home</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <style>
+            body {
+                width: 100vw;
+                overflow: hidden;
+                height: 100vh;
+
+            }
+        </style>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+
+
+    <body>
+        <!-- navbar -->
+        <div class=' w-screen h-[70px] fixed top-0 left-0 flex justify-between max-lg:hidden z-50 bg-white'>
+            <ul class=' flex justify-center items-center space-x-10  w-1/3 max-lg:space-x-6 '>
+                <li ><a href="/Flight/" class="text-black">Flight</a></li>
+                <li ><a href="/Flight/about" class="text-black">About</a></li>
+                <li ><a href="/Flight/feedback" class="text-black">Feedback</a></li>
+                <li ><a href="/Flight/blog" class="text-black">Blog</a></li>
+            </ul>
+            <ul class=' flex  items-center justify-center w-1/3'>
+                <li class='font-black'><a href="/Flight">Flight Booking</a></li>
+            </ul>
+            <ul class=' flex justify-center items-center space-x-10 w-1/3 max-lg:space-x-6' id="ul">
+                <li class=' bold cursor-pointer'><a href="/Flight/signUp.html">sign up</a></li>
+                <li class=' bold'><a href="/Flight/login.html">Login</a></li>
+            </ul>
+        </div>
+
+        <div class='flex'>
+            <div class='w-2/3  flex justify-center  mt-20'>
+                <div class='w-[60%] mt-2'>
+                    <h1 class='w-full font-bold text-[1.5rem]'>Insert Airplane</h1>
+                    <div class='w-full flex flex-col items-center space-y-2 mt-4'>
+
+                        <div class='flex w-full gap-x-5'>
+                            <div class='w-full flex flex-col'>
+                                <span class=' font-mormal text-gray-500'>Airline</span>
+                                <input type='text' class=' p-2 rounded-full outline-0  border mt-2  border-gray-600 ' id="airline" placeholder='Airline' />
+                            </div>
+                        </div>
+                        <div class='flex w-full gap-x-5'>
+                            <div class='w-full flex flex-col'>
+                                <span class=' font-mormal text-gray-500'>Model</span>
+                                <input type='text' class=' p-2 rounded-full outline-0  border mt-2  border-gray-600 ' id="model" placeholder='Model' />
+                            </div>
+                        </div>
+                        <div class='flex w-full gap-x-5'>
+                            <div class='w-full flex flex-col'>
+                                <span class=' font-mormal text-gray-500'>Economy Row</span>
+                                <input type='text' class=' p-2 rounded-full outline-0  border mt-2  border-gray-600 ' id="EconomyRow"  placeholder='00' />
+                            </div>
+                        </div>
+                        <div class='flex w-full gap-x-5'>
+                            <div class='w-full flex flex-col'>
+                                <span class=' font-mormal text-gray-500'>Economy Col</span>
+                                <input type='text' class=' p-2 rounded-full outline-0  border mt-2  border-gray-600 ' id="EconomyCol" placeholder='00' />
+                            </div>
+                        </div>
+                        <div class='flex w-full gap-x-5'>
+                            <div class='w-full flex flex-col'>
+                                <span class=' font-mormal text-gray-500'>Business Row</span>
+                                <input type='text' class=' p-2 rounded-full outline-0  border mt-2  border-gray-600 ' id="BusinessRow" placeholder='00' />
+                            </div>
+                        </div>
+                        <div class='flex w-full gap-x-5'>
+                            <div class='w-full flex flex-col'>
+                                <span class=' font-mormal text-gray-500'>Business Col</span>
+                                <input type='text' class=' p-2 rounded-full outline-0  border mt-2  border-gray-600 ' id="BusinessCol" placeholder='00' />
+                            </div>
+                        </div>
+                        <div class='flex w-full gap-x-5'>
+                            <div class='w-full flex flex-col'>
+                                <button class='w-full bg-black text-white h-[40px] rounded-full mt-3' id="btn"> <span >Insert</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='w-[40%] flex justify-center'>
+                <img src="./p.jpg" alt="..." class="w-full h-[cal(100vh-70px)] object-fit object-cover">
+            </div>
+        </div>
+
+    </body>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            let User = localStorage.getItem("user"); // Corrected method name to getItem
+            User = JSON.parse(User);
+            const ulElement = document.getElementById("ul"); // Corrected method name to getElementById
+            if (User && User.role === "Admin") {
+                ulElement.innerHTML = `
+               <li class='bold'><a >Logout</a></li>
+               <li class='bold'><a href="/Flight/insertFlight.html">Insert Flight</a></li>
+               <li class='bold'><a href="/Flight/insertAirplane.html">Insert AirPlane</a></li>
+           `;
+            } else if (User && User.role === "User") {
+                ulElement.innerHTML = `
+               <li class='bold'><a >Logout</a></li>
+           `;
+            }
+            
+            
+//            /GetFlightDetail
+
+            let flightId = localStorage.getItem("flight"); // Corrected method name to getItem
+            flightId = JSON.parse(User);
+            if(flightId){
+                
+            }
+            else{
+                alert("no!")
+            }
+        });
+
+
+
+
+        document.getElementById("btn").addEventListener("click", () => {
+            let user = localStorage.getItem("user"); // Corrected method name to getItem
+            user = JSON.parse(user);
+            if (user && user.role === "Admin") {
+                let airline = document.getElementById("airline").value;
+                let model = document.getElementById("model").value;
+                let EconomyRow = parseInt(document.getElementById("EconomyRow").value);
+                let EconomyCol = parseInt(document.getElementById("EconomyCol").value);
+                let BusinessCol = parseInt(document.getElementById("BusinessCol").value);
+                let BusinessRow = parseInt(document.getElementById("BusinessRow").value);
+
+                // Create JSON object
+                let jsonData = {
+                    "airline": airline,
+                    "model": model,
+                    "EconomyRow": EconomyRow,
+                    "EconomyCol": EconomyCol,
+                    "BusinessCol": BusinessCol,
+                    "BusinessRow": BusinessRow,
+                    "userid": user.id
+                };
+
+                console.log(jsonData);
+                fetch("/Flight/insertAirplane", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json;charset=UTF-8"
+                    },
+                    body: JSON.stringify(jsonData)
+                }).then((res) => {
+                    return res.json();
+                }).then((data) => {
+                    console.log(data);
+                    if (data.status === "ok") {
+                        location.replace("http://localhost:8080/Flight");
+                    } else {
+                        alert("Insertion failed: " + data.message);
+                    }
+                }).catch((error) => {
+                    console.error("Error:", error);
+                    alert("An error occurred while processing your request");
+                });
+            }
+        });
+
+
+
+    </script>
+</html>

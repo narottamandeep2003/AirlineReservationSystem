@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Insert Flight</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+        <style>
+            body {
+                width: 100vw;
+                overflow: hidden;
+                height: 100vh;
+
+            }
+
+        </style>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+
+
+    <body>
+        <!-- navbar -->
+        <div class=' w-screen h-[70px] fixed top-0 left-0 flex justify-between max-lg:hidden z-50 bg-white'>
+            <ul class=' flex justify-center items-center space-x-10  w-1/3 max-lg:space-x-6 '>
+                <li ><a href="/Flight/" class="text-black">Flight</a></li>
+                <li ><a href="/Flight/about" class="text-black">About</a></li>
+                <li ><a href="/Flight/feedback" class="text-black">Feedback</a></li>
+                <li ><a href="/Flight/blog" class="text-black">Blog</a></li>
+            </ul>
+            <ul class=' flex  items-center justify-center w-1/3'>
+                <li class='font-black'><a href="/Flight">Flight Booking</a></li>
+            </ul>
+            <ul class=' flex justify-center items-center space-x-10 w-1/3 max-lg:space-x-6' id="ul">
+                <li class=' bold cursor-pointer'><a href="/Flight/SignUp.html">sign up</a></li>
+                <li class=' bold'><a href="/Flight/login.html">Login</a></li>
+            </ul>
+        </div>
+
+        <div class='flex'>
+            <div class='w-2/3  flex justify-center  mt-20'>
+                <div class='w-[60%] mt-2'>
+                    <h1 class='w-full font-bold text-[1.5rem]'>Insert Flight</h1>
+                    <div class='w-full flex flex-col items-center space-y-2 mt-4'>
+
+                        <div class='flex w-full gap-x-5'>
+                            <div class='w-full flex flex-col'>
+                                <span class=' font-mormal text-gray-500'>Air Plane Id</span>
+                                <select class=' p-2 rounded-full outline-0 border-gray-600  border mt-2' id="option">
+
+                                </select>
+                            </div>
+                        </div>
+                        <div class='flex w-full gap-x-5'>
+                            <div class='w-full flex flex-col'>
+                                <span class=' font-mormal text-gray-500'>Economy Price</span>
+                                <input type='text' class=' p-2 rounded-full outline-0  border mt-2  border-gray-600 '
+                                       placeholder='Economy Price' name='economyPrice' />
+                            </div>
+                        </div>
+                        <div class='flex w-full gap-x-5'>
+                            <div class='w-full flex flex-col'>
+                                <span class=' font-mormal text-gray-500'>Business Price</span>
+                                <input type='text' class=' p-2 rounded-full outline-0  border mt-2  border-gray-600 '
+                                       placeholder='00' name='businessPrice' />
+                            </div>
+                        </div>
+                        <div class='flex w-full gap-x-5'>
+                            <div class='w-full flex flex-col w-1/2'>
+                                <span class=' font-mormal text-gray-500'>Depature date</span>
+                                <input type='text' class=' p-2 rounded-full outline-0  border mt-2  border-gray-600 '
+                                       placeholder='00'  name='departureDate'/>
+                            </div>
+
+                            <div class='w-full flex flex-col w-1/2'>
+                                <span class=' font-mormal text-gray-500'>Depature Time</span>
+                                <input type='text' class=' p-2 rounded-full outline-0  border mt-2  border-gray-600 '
+                                       placeholder='00' name='departureTime' />
+                            </div>
+                        </div>
+                        <div class='flex w-full gap-x-5'>
+                            <div class='w-full flex flex-col'>
+                                <span class=' font-mormal text-gray-500'>Depature From</span>
+                                <input type='text' class=' p-2 rounded-full outline-0  border mt-2  border-gray-600 '
+                                       placeholder='00' name='departureFrom' />
+                            </div>
+                        </div>
+                        <div class='flex w-full gap-x-5'>
+                            <div class='w-full flex flex-col'>
+                                <span class=' font-mormal text-gray-500'>Destination</span>
+                                <input type='text' class=' p-2 rounded-full outline-0  border mt-2  border-gray-600 '
+                                       placeholder='00' name='destination' />
+                            </div>
+                        </div>
+                        <div class='flex w-full gap-x-5'>
+                            <div class='w-full flex flex-col'>
+                                <button class='w-full bg-black text-white h-[40px] rounded-full mt-3' id="btn"> <span to="/payment">Insert</span></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class='w-[40%] flex justify-center'>
+                <img src="./p.jpg" alt="..." class="w-full h-[cal(100vh-70px)] object-fit object-cover">
+            </div>
+        </div>
+
+    </body>
+    <script>
+
+
+        document.addEventListener("DOMContentLoaded", () => {
+            let User = localStorage.getItem("user"); // Corrected method name to getItem
+            User = JSON.parse(User);
+            const ulElement = document.getElementById("ul"); // Corrected method name to getElementById
+            if (User && User.role === "Admin") {
+                ulElement.innerHTML = `
+               <li class='bold'><a >Logout</a></li>
+               <li class='bold'><a href="/Flight/insertFlight.html">Insert Flight</a></li>
+               <li class='bold'><a href="/Flight/insertAirplane.html">Insert AirPlane</a></li>
+           `;
+
+                let jsonData = {
+                    "userid": User.id
+                };
+
+
+                console.log(jsonData)
+                fetch("/Flight/UserAirlines", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json;charset=UTF-8"
+                    },
+                    body: JSON.stringify(jsonData)
+                }).then((res) => {
+                    return res.json();
+                }).then((data) => {
+                    console.log(data);
+                    if (data.status === "ok") {
+                        data.airplanes.forEach((e) => {
+                            document.getElementById("option").innerHTML += `
+                             <option value="${e.airplaneId}">${e.airplaneId} : ${e.model} </option>
+                              `
+                        })
+                    } else {
+                        alert("Registration failed: " + data.message);
+                    }
+                }).catch((error) => {
+                    console.error("Error:", error);
+                    alert("An error occurred while processing your request");
+                });
+
+
+            } else if (User && User.role === "User") {
+                ulElement.innerHTML = `
+               <li class='bold'><a >Logout</a></li>
+           `;
+            }
+
+
+        });
+
+        document.getElementById("btn").addEventListener("click", () => {
+            let airplaneId = parseInt(document.getElementById("option").value);
+            let economyPrice = parseFloat(document.querySelector("input[name='economyPrice']").value);
+            let businessPrice = parseFloat(document.querySelector("input[name='businessPrice']").value);
+            let departureDate = document.querySelector("input[name='departureDate']").value;
+            let departureTime = document.querySelector("input[name='departureTime']").value;
+            let departureFrom = document.querySelector("input[name='departureFrom']").value;
+            let destination = document.querySelector("input[name='destination']").value;
+// Validate inputs
+            if (isNaN(airplaneId) || isNaN(economyPrice) || isNaN(businessPrice)) {
+                alert("Please enter valid numbers for airplane ID, economy price, and business price.");
+            } else {
+                // Create JSON object
+                let User = localStorage.getItem("user"); // Corrected method name to getItem
+                User = JSON.parse(User);
+                const ulElement = document.getElementById("ul"); // Corrected method name to getElementById
+                if (User && User.role === "Admin") {
+                    let jsonData = {
+                        "airplaneId": airplaneId,
+                        "economyPrice": economyPrice,
+                        "businessPrice": businessPrice,
+                        "departureDate": departureDate,
+                        "departureTime": departureTime,
+                        "departureFrom": departureFrom,
+                        "destination": destination,
+                        "userid": User.id
+                    };
+                    console.log(jsonData);
+                    fetch("/Flight/InsertFlight", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json;charset=UTF-8"
+                        },
+                        body: JSON.stringify(jsonData)
+                    }).then((res) => {
+                        return res.json();
+                    }).then((data) => {
+                        console.log(data);
+                        if (data.status === "ok") {
+                            location.replace("http://localhost:8080/Flight/");
+                        } else {
+                            alert("Insertion failed: " + data);
+                        }
+                    }).catch((error) => {
+                        console.error("Error:", error);
+                        alert("An error occurred while processing your request");
+                    });
+                }
+
+            }
+
+        });
+
+
+    </script>
+</html>
